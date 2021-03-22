@@ -4,48 +4,37 @@
     <div v-for="tile in mapTiles" :key="tile.index">
       <MapTile :tile="tile"/>
     </div>
+    <div v-for="portal in portals" :key="portal.index">
+      <Portal :portal="portal"/>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { CSSProperties, defineComponent } from 'vue'
+import { CSSProperties, defineComponent, PropType } from 'vue'
 import MapTile from './MapTile.vue'
-import MapTileInfo from '../model/MapTile'
+import Portal from './Portal.vue'
+import { MapTileInfo, PortalInfo } from '../model/Model'
 
 export default defineComponent({
   name: 'MapGrid',
-  components: { MapTile },
-  data () {
-    return {
-      mapTiles: [
-        new MapTileInfo('bushes', 0),
-        new MapTileInfo('bushes', 1),
-        new MapTileInfo('bushes', 2),
-        new MapTileInfo('bushes', 3),
-        new MapTileInfo('bushes', 4),
-        new MapTileInfo('dirt', 5),
-        new MapTileInfo('dirt', 6),
-        new MapTileInfo('dirt', 7),
-        new MapTileInfo('bushes', 8),
-        new MapTileInfo('bushes', 9),
-        new MapTileInfo('bushes', 10),
-        new MapTileInfo('bushes', 11),
-        new MapTileInfo('dirt', 12),
-        new MapTileInfo('bushes', 13),
-        new MapTileInfo('bushes', 14),
-        new MapTileInfo('bushes', 15),
-        new MapTileInfo('bushes', 16),
-        new MapTileInfo('dirt', 17),
-        new MapTileInfo('dirt', 18),
-        new MapTileInfo('dirt', 19),
-        new MapTileInfo('bushes', 20),
-        new MapTileInfo('bushes', 21),
-        new MapTileInfo('bushes', 22),
-        new MapTileInfo('bushes', 23),
-        new MapTileInfo('bushes', 24)
-      ],
-      charX: 0,
-      charY: 0
+  components: { MapTile, Portal },
+  props: {
+    mapTiles: {
+      type: Array as PropType<Array<MapTileInfo>>,
+      required: true
+    },
+    portals: {
+      type: Array as PropType<Array<PortalInfo>>,
+      required: true
+    },
+    charX: {
+      type: Number,
+      required: true
+    },
+    charY: {
+      type: Number,
+      required: true
     }
   },
   computed: {
@@ -56,33 +45,9 @@ export default defineComponent({
         position: 'fixed',
         left: x + 'px',
         top: y + 'px',
-        zIndex: 100
+        zIndex: 10
       }
     }
-  },
-  methods: {
-    handleKeypress (e: KeyboardEvent) {
-      switch (e.code) {
-        case 'KeyW':
-          this.charY -= 1
-          break
-        case 'KeyS':
-          this.charY += 1
-          break
-        case 'KeyA':
-          this.charX -= 1
-          break
-        case 'KeyD':
-          this.charX += 1
-          break
-      }
-    }
-  },
-  mounted () {
-    window.addEventListener('keypress', this.handleKeypress)
-  },
-  unmounted () {
-    window.removeEventListener('keypress', this.handleKeypress)
   }
 })
 </script>
