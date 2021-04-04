@@ -2,6 +2,8 @@
 
 ## dungeon-crawler
 
+Prod URL: https://prod.d2x3uc4v2d9264.amplifyapp.com/
+
 ### Testing UI locally
 
 #### Setup Dependencies
