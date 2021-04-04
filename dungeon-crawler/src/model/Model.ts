@@ -46,12 +46,12 @@ export class LevelRequest {
 }
 
 export class LevelResponse {
-  char_start_index = 0;
+  charStartIndex = 0;
   tiles: MapTileInfo[] = [];
   portals: PortalInfo[] = [];
 
-  constructor (char_start_index: number, tiles: MapTileInfo[], portals: PortalInfo[]) {
-    this.char_start_index = char_start_index
+  constructor (charStartIndex: number, tiles: MapTileInfo[], portals: PortalInfo[]) {
+    this.charStartIndex = charStartIndex
     this.tiles = tiles
     this.portals = portals
   }

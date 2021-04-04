@@ -22,18 +22,19 @@ export default defineComponent({
   },
   methods: {
     requestLevel (level: number) {
-      const requestOptions = {
+      const requestOptions: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ level: level })
+        body: JSON.stringify({ level: level }),
+        redirect: 'follow'
       }
       fetch('https://mdnouzkj44.execute-api.us-west-2.amazonaws.com/prod', requestOptions)
         .then(response => response.json() as Promise<LevelResponse>)
         .then(data => {
           this.mapTiles = data.tiles
           this.portals = data.portals
-          this.charX = data.char_start_index % 5
-          this.charY = data.char_start_index / 5
+          this.charX = data.charStartIndex % 5
+          this.charY = data.charStartIndex / 5
         })
     },
     handleKeypress (e: KeyboardEvent) {

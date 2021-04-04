@@ -34,6 +34,7 @@ pub struct LevelRequest {
 
 #[derive(Serialize, Clone)]
 pub struct LevelResponse {
+    #[serde(rename(serialize = "charStartIndex"))]
     pub char_start_index: usize,
     pub tiles: Vec<MapTile>,
     pub portals: Vec<Portal>,
