@@ -126,6 +126,12 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     r#type: MapTileType::Bushes,
                 },
             ],
+            enemies: vec![
+                Enemy {
+                    r#type: EnemyType::Walker,
+                    path: vec![19, 18, 17, 12, 7],
+                },
+            ],
             portals: vec![
                 Portal {
                     index: 5,
@@ -243,6 +249,7 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     r#type: MapTileType::Dirt,
                 },
             ],
+            enemies: vec![],
             portals: vec![
                 Portal {
                     index: 10,

@@ -1,11 +1,11 @@
 <template>
-  <MapGrid :mapTiles="this.mapTiles" :portals="this.portals" :charX="this.charX" :charY="this.charY"/>
+  <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :portals="this.portals" :charX="this.charX" :charY="this.charY"/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import MapGrid from './components/MapGrid.vue'
-import { LevelResponse, MapTileInfo, PortalInfo } from './model/Model'
+import { LevelRequest, LevelResponse, MapTileInfo, PortalInfo, isTileImpenetrable, EnemyInfo } from './model/Model'
 
 export default defineComponent({
   name: 'App',
@@ -15,6 +15,7 @@ export default defineComponent({
   data () {
     return {
       mapTiles: [] as MapTileInfo[],
+      enemies: [] as EnemyInfo[],
       portals: [] as PortalInfo[],
       charX: 0,
       charY: 0
@@ -32,6 +33,7 @@ export default defineComponent({
         .then(response => response.json() as Promise<LevelResponse>)
         .then(data => {
           this.mapTiles = data.tiles
+          this.enemies = data.enemies
           this.portals = data.portals
           this.charX = data.charStartIndex % 5
           this.charY = data.charStartIndex / 5
@@ -45,6 +47,9 @@ export default defineComponent({
             return
           }
           const newIndex = newY * 5 + this.charX % 5
+          if (isTileImpenetrable(this.mapTiles[newIndex])) {
+            return
+          }
           for (const portal of this.portals) {
             if (portal.index === newIndex && portal.target != null) {
               this.requestLevel(portal.target)
@@ -55,6 +60,20 @@ export default defineComponent({
           break
         }
         case 'KeyS': {
+          const newY = this.charY + 1
+          if (newY === 5) {
+            return
+          }
+          const newIndex = newY * 5 + this.charX % 5
+          if (isTileImpenetrable(this.mapTiles[newIndex])) {
+            return
+          }
+          for (const portal of this.portals) {
+            if (portal.index === newIndex && portal.target != null) {
+              this.requestLevel(portal.target)
+              return
+            }
+          }
           this.charY += 1
           break
         }
@@ -64,6 +83,9 @@ export default defineComponent({
             return
           }
           const newIndex = this.charY * 5 + newX % 5
+          if (isTileImpenetrable(this.mapTiles[newIndex])) {
+            return
+          }
           for (const portal of this.portals) {
             if (portal.index === newIndex && portal.target != null) {
               this.requestLevel(portal.target)
@@ -79,6 +101,9 @@ export default defineComponent({
             return
           }
           const newIndex = this.charY * 5 + newX % 5
+          if (isTileImpenetrable(this.mapTiles[newIndex])) {
+            return
+          }
           for (const portal of this.portals) {
             if (portal.index === newIndex && portal.target != null) {
               this.requestLevel(portal.target)

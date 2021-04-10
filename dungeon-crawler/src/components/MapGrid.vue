@@ -4,6 +4,9 @@
     <div v-for="tile in mapTiles" :key="tile.index">
       <MapTile :tile="tile"/>
     </div>
+    <div v-for="enemy in enemies" :key="enemy.path[0]">
+      <Enemy :enemy="enemy"/>
+    </div>
     <div v-for="portal in portals" :key="portal.index">
       <Portal :portal="portal"/>
     </div>
@@ -14,14 +17,19 @@
 import { CSSProperties, defineComponent, PropType } from 'vue'
 import MapTile from './MapTile.vue'
 import Portal from './Portal.vue'
-import { MapTileInfo, PortalInfo } from '../model/Model'
+import Enemy from './Enemy.vue'
+import { EnemyInfo, MapTileInfo, PortalInfo } from '../model/Model'
 
 export default defineComponent({
   name: 'MapGrid',
-  components: { MapTile, Portal },
+  components: { MapTile, Enemy, Portal },
   props: {
     mapTiles: {
       type: Array as PropType<Array<MapTileInfo>>,
+      required: true
+    },
+    enemies: {
+      type: Array as PropType<Array<EnemyInfo>>,
       required: true
     },
     portals: {

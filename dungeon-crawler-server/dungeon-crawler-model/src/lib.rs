@@ -37,5 +37,18 @@ pub struct LevelResponse {
     #[serde(rename(serialize = "charStartIndex"))]
     pub char_start_index: usize,
     pub tiles: Vec<MapTile>,
+    pub enemies: Vec<Enemy>,
     pub portals: Vec<Portal>,
+}
+
+#[derive(Serialize, Clone, Copy)]
+pub enum EnemyType {
+    Crawler,
+    Walker,
+}
+
+#[derive(Serialize, Clone)]
+pub struct Enemy {
+    pub r#type: EnemyType,
+    pub path: Vec<usize>,
 }

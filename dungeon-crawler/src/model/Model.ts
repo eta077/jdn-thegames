@@ -1,7 +1,7 @@
 
 export enum MapTileType {
-  Dirt,
-  Bushes,
+  Dirt = 'Dirt',
+  Bushes = 'Bushes',
 }
 
 export class MapTileInfo {
@@ -12,17 +12,18 @@ export class MapTileInfo {
     this.index = index
     this.type = type
   }
+}
 
-  isImpenetrable (): boolean {
-    return this.type === MapTileType.Bushes
-  }
+export function isTileImpenetrable (tile: MapTileInfo): boolean {
+  console.log(MapTileType.Bushes)
+  return tile.type === MapTileType.Bushes
 }
 
 export enum PortalOrientation {
-  Up,
-  Down,
-  Left,
-  Right,
+  Up = 'Up',
+  Down = 'Down',
+  Left = 'Left',
+  Right = 'Right',
 }
 
 export class PortalInfo {
@@ -37,6 +38,21 @@ export class PortalInfo {
   }
 }
 
+export enum EnemyType {
+  Crawler = 'Crawler',
+  Walker = 'Walker',
+}
+
+export class EnemyInfo {
+  type = EnemyType.Crawler;
+  path: number[] = [];
+
+  constructor (type: EnemyType, path: number[]) {
+    this.type = type
+    this.path = path
+  }
+}
+
 export class LevelRequest {
   level = 0;
 
@@ -48,11 +64,13 @@ export class LevelRequest {
 export class LevelResponse {
   charStartIndex = 0;
   tiles: MapTileInfo[] = [];
+  enemies: EnemyInfo[] = [];
   portals: PortalInfo[] = [];
 
-  constructor (charStartIndex: number, tiles: MapTileInfo[], portals: PortalInfo[]) {
+  constructor (charStartIndex: number, tiles: MapTileInfo[], enemies: EnemyInfo[], portals: PortalInfo[]) {
     this.charStartIndex = charStartIndex
     this.tiles = tiles
+    this.enemies = enemies
     this.portals = portals
   }
 }
