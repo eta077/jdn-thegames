@@ -1,21 +1,21 @@
 <template>
   <div>
     <img
-      :src="require(`../../../../assets/${tile.type}.png`)"
+      :src="require(`../../../../assets/${tile.type.name}.png`)"
       :style="tileStyle"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { CSSProperties, defineComponent } from 'vue'
+import { CSSProperties, defineComponent, PropType } from 'vue'
 import { MapTileInfo } from '../model/Model'
 
 export default defineComponent({
   name: 'MapTile',
   props: {
     tile: {
-      type: MapTileInfo,
+      type: Object as PropType<MapTileInfo>,
       required: true
     }
   },

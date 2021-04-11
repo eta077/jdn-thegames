@@ -24,114 +24,127 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
     match level {
         1 => Ok(LevelResponse {
             char_start_index: 5,
+            tile_types: vec![
+                MapTileType {
+                    name: MapTileTypeName::Bushes,
+                    impenetrable: true,
+                },
+                MapTileType {
+                    name: MapTileTypeName::Dirt,
+                    impenetrable: false,
+                },
+            ],
             tiles: vec![
                 MapTile {
+                    type_index: 0,
                     index: 0,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 1,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 2,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 3,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 4,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 5,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 6,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 7,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 8,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 9,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 10,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 11,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 12,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 13,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 14,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 15,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 16,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 17,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 18,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 1,
                     index: 19,
-                    r#type: MapTileType::Dirt,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 20,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 21,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 22,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 23,
-                    r#type: MapTileType::Bushes,
                 },
                 MapTile {
+                    type_index: 0,
                     index: 24,
-                    r#type: MapTileType::Bushes,
                 },
             ],
-            enemies: vec![
-                Enemy {
-                    r#type: EnemyType::Walker,
-                    path: vec![19, 18, 17, 12, 7],
-                },
-            ],
+            enemy_types: vec![EnemyType {
+                name: EnemyTypeName::Walker,
+                health: 1,
+                speed: 1,
+            }],
+            enemies: vec![Enemy {
+                type_index: 0,
+                path: vec![19, 18, 17, 12, 7],
+            }],
             portals: vec![
                 Portal {
                     index: 5,
@@ -147,108 +160,119 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
         }),
         2 => Ok(LevelResponse {
             char_start_index: 10,
-            tiles: vec![
-                MapTile {
-                    index: 0,
-                    r#type: MapTileType::Bushes,
+            tile_types: vec![
+                MapTileType {
+                    name: MapTileTypeName::Bushes,
+                    impenetrable: true,
                 },
-                MapTile {
-                    index: 1,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 2,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 3,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 4,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 5,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 6,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 7,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 8,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 9,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 10,
-                    r#type: MapTileType::Dirt,
-                },
-                MapTile {
-                    index: 11,
-                    r#type: MapTileType::Dirt,
-                },
-                MapTile {
-                    index: 12,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 13,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 14,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 15,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 16,
-                    r#type: MapTileType::Dirt,
-                },
-                MapTile {
-                    index: 17,
-                    r#type: MapTileType::Dirt,
-                },
-                MapTile {
-                    index: 18,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 19,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 20,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 21,
-                    r#type: MapTileType::Bushes,
-                },
-                MapTile {
-                    index: 22,
-                    r#type: MapTileType::Dirt,
-                },
-                MapTile {
-                    index: 23,
-                    r#type: MapTileType::Dirt,
-                },
-                MapTile {
-                    index: 24,
-                    r#type: MapTileType::Dirt,
+                MapTileType {
+                    name: MapTileTypeName::Dirt,
+                    impenetrable: false,
                 },
             ],
+            tiles: vec![
+                MapTile {
+                    type_index: 0,
+                    index: 0,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 1,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 2,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 3,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 4,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 5,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 6,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 7,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 8,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 9,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 10,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 11,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 12,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 13,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 14,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 15,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 16,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 17,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 18,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 19,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 20,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 21,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 22,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 23,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 24,
+                },
+            ],
+            enemy_types: vec![],
             enemies: vec![],
             portals: vec![
                 Portal {

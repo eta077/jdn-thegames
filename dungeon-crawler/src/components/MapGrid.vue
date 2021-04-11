@@ -18,7 +18,7 @@ import { CSSProperties, defineComponent, PropType } from 'vue'
 import MapTile from './MapTile.vue'
 import Portal from './Portal.vue'
 import Enemy from './Enemy.vue'
-import { EnemyInfo, MapTileInfo, PortalInfo } from '../model/Model'
+import { EnemyInfo, EnemyType, MapTileInfo, MapTileType, PortalInfo } from '../model/Model'
 
 export default defineComponent({
   name: 'MapGrid',

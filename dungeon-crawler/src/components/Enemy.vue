@@ -1,15 +1,15 @@
 <template>
   <div>
     <img
-      :src="require(`../../../../assets/${enemy.type}.png`)"
+      :src="require(`../../../../assets/${enemy.type.name}.png`)"
       :style="enemyStyle"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { CSSProperties, defineComponent } from 'vue'
-import { EnemyInfo } from '../model/Model'
+import { CSSProperties, defineComponent, PropType } from 'vue'
+import { EnemyData } from '../model/Model'
 
 export default defineComponent({
   name: 'Enemy',
@@ -21,7 +21,7 @@ export default defineComponent({
   },
   props: {
     enemy: {
-      type: EnemyInfo,
+      type: Object as PropType<EnemyData>,
       required: true
     }
   },
@@ -52,7 +52,7 @@ export default defineComponent({
     }
   },
   mounted () {
-    setInterval(this.incrementIndex, 1000)
+    setInterval(this.incrementIndex, this.enemy.type.speed * 1000)
   }
 })
 </script>

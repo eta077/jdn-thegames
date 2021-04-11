@@ -1,56 +1,48 @@
 
-export enum MapTileType {
-  Dirt = 'Dirt',
-  Bushes = 'Bushes',
+export interface MapTileType {
+  name: string;
+  impenetrable: boolean;
 }
 
-export class MapTileInfo {
-  index = 0;
-  type = MapTileType.Bushes;
-
-  constructor (index: number, type: MapTileType) {
-    this.index = index
-    this.type = type
-  }
+export interface MapTileData {
+  type: MapTileType;
+  index: number;
 }
 
-export function isTileImpenetrable (tile: MapTileInfo): boolean {
-  console.log(MapTileType.Bushes)
-  return tile.type === MapTileType.Bushes
+export interface MapTileInfo {
+  typeIndex: number;
+  index: number;
 }
 
-export enum PortalOrientation {
-  Up = 'Up',
-  Down = 'Down',
-  Left = 'Left',
-  Right = 'Right',
+export interface PortalInfo {
+  index: number;
+  target: number;
+  orientation: string;
 }
 
-export class PortalInfo {
-  index = 0;
-  target = 0;
-  orientation = PortalOrientation.Right;
-
-  constructor (index: number, target: number, orientation: PortalOrientation) {
-    this.index = index
-    this.target = target
-    this.orientation = orientation
-  }
+export interface EnemyType {
+  name: string;
+  health: number;
+  speed: number;
 }
 
-export enum EnemyType {
-  Crawler = 'Crawler',
-  Walker = 'Walker',
+export interface EnemyData {
+  type: EnemyType;
+  path: number[];
 }
 
-export class EnemyInfo {
-  type = EnemyType.Crawler;
-  path: number[] = [];
+export interface EnemyInfo {
+  typeIndex: number;
+  path: number[];
+}
 
-  constructor (type: EnemyType, path: number[]) {
-    this.type = type
-    this.path = path
-  }
+export interface LevelResponse {
+  charStartIndex: number;
+  tileTypes: MapTileType[];
+  tiles: MapTileInfo[];
+  enemyTypes: EnemyType[];
+  enemies: EnemyInfo[];
+  portals: PortalInfo[];
 }
 
 export class LevelRequest {
@@ -58,19 +50,5 @@ export class LevelRequest {
 
   constructor (level: number) {
     this.level = level
-  }
-}
-
-export class LevelResponse {
-  charStartIndex = 0;
-  tiles: MapTileInfo[] = [];
-  enemies: EnemyInfo[] = [];
-  portals: PortalInfo[] = [];
-
-  constructor (charStartIndex: number, tiles: MapTileInfo[], enemies: EnemyInfo[], portals: PortalInfo[]) {
-    this.charStartIndex = charStartIndex
-    this.tiles = tiles
-    this.enemies = enemies
-    this.portals = portals
   }
 }

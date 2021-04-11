@@ -1,11 +1,12 @@
 <template>
-  <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :portals="this.portals" :charX="this.charX" :charY="this.charY"/>
+  <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :portals="this.portals"
+    :charX="this.charX" :charY="this.charY"/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import MapGrid from './components/MapGrid.vue'
-import { LevelRequest, LevelResponse, MapTileInfo, PortalInfo, isTileImpenetrable, EnemyInfo } from './model/Model'
+import { EnemyData, LevelRequest, LevelResponse, MapTileData, PortalInfo } from './model/Model'
 
 export default defineComponent({
   name: 'App',
@@ -14,8 +15,8 @@ export default defineComponent({
   },
   data () {
     return {
-      mapTiles: [] as MapTileInfo[],
-      enemies: [] as EnemyInfo[],
+      mapTiles: [] as MapTileData[],
+      enemies: [] as EnemyData[],
       portals: [] as PortalInfo[],
       charX: 0,
       charY: 0
@@ -23,17 +24,26 @@ export default defineComponent({
   },
   methods: {
     requestLevel (level: number) {
+      const levelRequest = new LevelRequest(level)
       const requestOptions: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ level: level }),
+        body: JSON.stringify(levelRequest),
         redirect: 'follow'
       }
       fetch('https://mdnouzkj44.execute-api.us-west-2.amazonaws.com/prod', requestOptions)
         .then(response => response.json() as Promise<LevelResponse>)
         .then(data => {
-          this.mapTiles = data.tiles
-          this.enemies = data.enemies
+          const resTiles: MapTileData[] = []
+          for (const tile of data.tiles) {
+            resTiles.push({ type: data.tileTypes[tile.typeIndex], index: tile.index })
+          }
+          this.mapTiles = resTiles
+          const resEnemies: EnemyData[] = []
+          for (const enemy of data.enemies) {
+            resEnemies.push({ type: data.enemyTypes[enemy.typeIndex], path: enemy.path })
+          }
+          this.enemies = resEnemies
           this.portals = data.portals
           this.charX = data.charStartIndex % 5
           this.charY = data.charStartIndex / 5
@@ -47,16 +57,9 @@ export default defineComponent({
             return
           }
           const newIndex = newY * 5 + this.charX % 5
-          if (isTileImpenetrable(this.mapTiles[newIndex])) {
-            return
+          if (this.moveCharacter(newIndex)) {
+            this.charY -= 1
           }
-          for (const portal of this.portals) {
-            if (portal.index === newIndex && portal.target != null) {
-              this.requestLevel(portal.target)
-              return
-            }
-          }
-          this.charY -= 1
           break
         }
         case 'KeyS': {
@@ -65,16 +68,9 @@ export default defineComponent({
             return
           }
           const newIndex = newY * 5 + this.charX % 5
-          if (isTileImpenetrable(this.mapTiles[newIndex])) {
-            return
+          if (this.moveCharacter(newIndex)) {
+            this.charY += 1
           }
-          for (const portal of this.portals) {
-            if (portal.index === newIndex && portal.target != null) {
-              this.requestLevel(portal.target)
-              return
-            }
-          }
-          this.charY += 1
           break
         }
         case 'KeyA': {
@@ -83,16 +79,9 @@ export default defineComponent({
             return
           }
           const newIndex = this.charY * 5 + newX % 5
-          if (isTileImpenetrable(this.mapTiles[newIndex])) {
-            return
+          if (this.moveCharacter(newIndex)) {
+            this.charX -= 1
           }
-          for (const portal of this.portals) {
-            if (portal.index === newIndex && portal.target != null) {
-              this.requestLevel(portal.target)
-              return
-            }
-          }
-          this.charX -= 1
           break
         }
         case 'KeyD': {
@@ -101,19 +90,24 @@ export default defineComponent({
             return
           }
           const newIndex = this.charY * 5 + newX % 5
-          if (isTileImpenetrable(this.mapTiles[newIndex])) {
-            return
+          if (this.moveCharacter(newIndex)) {
+            this.charX += 1
           }
-          for (const portal of this.portals) {
-            if (portal.index === newIndex && portal.target != null) {
-              this.requestLevel(portal.target)
-              return
-            }
-          }
-          this.charX += 1
           break
         }
       }
+    },
+    moveCharacter (newIndex: number): boolean {
+      if (this.mapTiles[newIndex].type.impenetrable) {
+        return false
+      }
+      for (const portal of this.portals) {
+        if (portal.index === newIndex && portal.target != null) {
+          this.requestLevel(portal.target)
+          return false
+        }
+      }
+      return true
     }
   },
   mounted () {

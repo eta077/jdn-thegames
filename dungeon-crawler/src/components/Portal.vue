@@ -8,14 +8,14 @@
 </template>
 
 <script lang="ts">
-import { CSSProperties, defineComponent } from 'vue'
+import { CSSProperties, defineComponent, PropType } from 'vue'
 import { PortalInfo } from '../model/Model'
 
 export default defineComponent({
   name: 'Portal',
   props: {
     portal: {
-      type: PortalInfo,
+      type: Object as PropType<PortalInfo>,
       required: true
     }
   },
