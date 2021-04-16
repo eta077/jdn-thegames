@@ -17,4 +17,4 @@ Prod URL: https://prod.d2x3uc4v2d9264.amplifyapp.com/
 
 1. From the `jdn-thegames\dungeon-crawler` directory, execute `npm run serve`
 2. From a browser, navigate to the URL displayed in the console, i.e. `http://localhost:8080`
-3. Navigate using WSAD
+3. Navigate using WSAD, use J to jump
