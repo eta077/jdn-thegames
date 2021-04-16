@@ -142,6 +142,7 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                 speed: 1,
             }],
             enemies: vec![Enemy {
+                id: 0,
                 type_index: 0,
                 path: vec![19, 18, 17, 12, 7],
             }],

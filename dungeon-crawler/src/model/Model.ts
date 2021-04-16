@@ -27,13 +27,23 @@ export interface EnemyType {
 }
 
 export interface EnemyData {
+  id: number;
   type: EnemyType;
   path: number[];
+  curIndex: number;
+  curHealth: number;
 }
 
 export interface EnemyInfo {
+  id: number;
   typeIndex: number;
   path: number[];
+}
+
+export interface CharacterData {
+  curIndex: number;
+  curHealth: number;
+  jumping: boolean;
 }
 
 export interface LevelResponse {

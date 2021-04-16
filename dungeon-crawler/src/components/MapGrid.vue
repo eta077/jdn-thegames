@@ -1,31 +1,32 @@
 <template>
   <div>
-    <img src="../../../../assets/character.png" :style="charStyle" />
     <div v-for="tile in mapTiles" :key="tile.index">
       <MapTile :tile="tile"/>
     </div>
-    <div v-for="enemy in enemies" :key="enemy.path[0]">
-      <Enemy :enemy="enemy"/>
+    <div v-for="enemy in enemies" :key="enemy.id">
+      <Enemy :enemy="enemy" v-bind="$attrs"/>
     </div>
     <div v-for="portal in portals" :key="portal.index">
       <Portal :portal="portal"/>
     </div>
+    <Character :character="character"/>
   </div>
 </template>
 
 <script lang="ts">
-import { CSSProperties, defineComponent, PropType } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import MapTile from './MapTile.vue'
-import Portal from './Portal.vue'
 import Enemy from './Enemy.vue'
-import { EnemyInfo, EnemyType, MapTileInfo, MapTileType, PortalInfo } from '../model/Model'
+import Portal from './Portal.vue'
+import Character from './Character.vue'
+import { EnemyInfo, MapTileData, PortalInfo } from '../model/Model'
 
 export default defineComponent({
   name: 'MapGrid',
-  components: { MapTile, Enemy, Portal },
+  components: { MapTile, Enemy, Portal, Character },
   props: {
     mapTiles: {
-      type: Array as PropType<Array<MapTileInfo>>,
+      type: Array as PropType<Array<MapTileData>>,
       required: true
     },
     enemies: {
@@ -36,25 +37,9 @@ export default defineComponent({
       type: Array as PropType<Array<PortalInfo>>,
       required: true
     },
-    charX: {
-      type: Number,
+    character: {
+      type: Object as PropType<CharacterData>,
       required: true
-    },
-    charY: {
-      type: Number,
-      required: true
-    }
-  },
-  computed: {
-    charStyle (): CSSProperties {
-      const x = (this.charX * 200) + 50
-      const y = (this.charY * 200) + 50
-      return {
-        position: 'fixed',
-        left: x + 'px',
-        top: y + 'px',
-        zIndex: 10
-      }
     }
   }
 })

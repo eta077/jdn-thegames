@@ -16,7 +16,8 @@ export default defineComponent({
   data () {
     return {
       reverse: false,
-      index: 0
+      curIndex: 0,
+      intervalId: 0
     }
   },
   props: {
@@ -27,8 +28,8 @@ export default defineComponent({
   },
   computed: {
     enemyStyle (): CSSProperties {
-      const x = ((this.enemy.path[this.index] % 5) * 200)
-      const y = Math.floor(this.enemy.path[this.index] / 5) * 200
+      const x = ((this.enemy.path[this.curIndex] % 5) * 200)
+      const y = Math.floor(this.enemy.path[this.curIndex] / 5) * 200
       return {
         position: 'fixed',
         left: x + 'px',
@@ -39,20 +40,25 @@ export default defineComponent({
   methods: {
     incrementIndex () {
       if (this.reverse) {
-        if (this.index === 1) {
+        if (this.curIndex === 1) {
           this.reverse = false
         }
-        this.index -= 1
+        this.curIndex -= 1
       } else {
-        if (this.index === this.enemy.path.length - 2) {
+        if (this.curIndex === this.enemy.path.length - 2) {
           this.reverse = true
         }
-        this.index += 1
+        this.curIndex += 1
       }
+      this.$emit('enemyMoved', { enemyId: this.enemy.id, newIndex: this.enemy.path[this.curIndex] })
     }
   },
+  emits: ['enemyMoved'],
   mounted () {
-    setInterval(this.incrementIndex, this.enemy.type.speed * 1000)
+    this.intervalId = setInterval(this.incrementIndex, this.enemy.type.speed * 1000)
+  },
+  unmounted () {
+    clearInterval(this.intervalId)
   }
 })
 </script>

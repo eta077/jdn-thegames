@@ -49,6 +49,7 @@ pub struct EnemyType {
 
 #[derive(Serialize, Clone)]
 pub struct Enemy {
+    pub id: usize,
     #[serde(rename(serialize = "typeIndex"))]
     pub type_index: usize,
     pub path: Vec<usize>,

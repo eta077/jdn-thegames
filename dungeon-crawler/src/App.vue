@@ -1,12 +1,13 @@
 <template>
   <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :portals="this.portals"
-    :charX="this.charX" :charY="this.charY"/>
+    :character="this.character" @enemyMoved="this.handleEnemyMoved"/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import MapGrid from './components/MapGrid.vue'
-import { EnemyData, LevelRequest, LevelResponse, MapTileData, PortalInfo } from './model/Model'
+import { EnemyMovedEvent } from './model/Events'
+import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, PortalInfo } from './model/Model'
 
 export default defineComponent({
   name: 'App',
@@ -18,8 +19,7 @@ export default defineComponent({
       mapTiles: [] as MapTileData[],
       enemies: [] as EnemyData[],
       portals: [] as PortalInfo[],
-      charX: 0,
-      charY: 0
+      character: { curIndex: 0, curHealth: 1 } as CharacterData
     }
   },
   methods: {
@@ -41,57 +41,64 @@ export default defineComponent({
           this.mapTiles = resTiles
           const resEnemies: EnemyData[] = []
           for (const enemy of data.enemies) {
-            resEnemies.push({ type: data.enemyTypes[enemy.typeIndex], path: enemy.path })
+            const enemyType = data.enemyTypes[enemy.typeIndex]
+            resEnemies.push({ id: enemy.id, type: enemyType, path: enemy.path, curIndex: enemy.path[0], curHealth: enemyType.health })
           }
           this.enemies = resEnemies
           this.portals = data.portals
-          this.charX = data.charStartIndex % 5
-          this.charY = data.charStartIndex / 5
+          this.character.curIndex = data.charStartIndex
         })
     },
     handleKeypress (e: KeyboardEvent) {
       switch (e.code) {
         case 'KeyW': {
-          const newY = this.charY - 1
+          const newIndex = this.character.curIndex - 5
+          const newY = newIndex / 5
           if (newY < 0) {
             return
           }
-          const newIndex = newY * 5 + this.charX % 5
           if (this.moveCharacter(newIndex)) {
-            this.charY -= 1
+            this.character.curIndex = newIndex
           }
           break
         }
         case 'KeyS': {
-          const newY = this.charY + 1
+          const newIndex = this.character.curIndex + 5
+          const newY = newIndex / 5
           if (newY === 5) {
             return
           }
-          const newIndex = newY * 5 + this.charX % 5
           if (this.moveCharacter(newIndex)) {
-            this.charY += 1
+            this.character.curIndex = newIndex
           }
           break
         }
         case 'KeyA': {
-          const newX = this.charX - 1
+          const newX = (this.character.curIndex % 5) - 1
           if (newX < 0) {
             return
           }
-          const newIndex = this.charY * 5 + newX % 5
+          const newIndex = this.character.curIndex - 1
           if (this.moveCharacter(newIndex)) {
-            this.charX -= 1
+            this.character.curIndex = newIndex
           }
           break
         }
         case 'KeyD': {
-          const newX = this.charX + 1
+          const newX = (this.character.curIndex % 5) + 1
           if (newX === 5) {
             return
           }
-          const newIndex = this.charY * 5 + newX % 5
+          const newIndex = this.character.curIndex + 1
           if (this.moveCharacter(newIndex)) {
-            this.charX += 1
+            this.character.curIndex = newIndex
+          }
+          break
+        }
+        case 'KeyJ': {
+          if (!this.character.jumping) {
+            this.character.jumping = true
+            setTimeout(this.endCharacterJump, 250)
           }
           break
         }
@@ -101,6 +108,12 @@ export default defineComponent({
       if (this.mapTiles[newIndex].type.impenetrable) {
         return false
       }
+      for (const enemy of this.enemies) {
+        if (enemy.curIndex === newIndex) {
+          this.character.curIndex = 5
+          return false
+        }
+      }
       for (const portal of this.portals) {
         if (portal.index === newIndex && portal.target != null) {
           this.requestLevel(portal.target)
@@ -108,6 +121,25 @@ export default defineComponent({
         }
       }
       return true
+    },
+    endCharacterJump () {
+      this.character.jumping = false
+      let removedEnemy = this.enemies.length
+      for (let i = 0; i < this.enemies.length; i++) {
+        if (this.enemies[i].curIndex === this.character.curIndex) {
+          removedEnemy = i
+          break
+        }
+      }
+      if (removedEnemy < this.enemies.length) {
+        this.enemies.splice(removedEnemy, 1)
+      }
+    },
+    handleEnemyMoved (event: EnemyMovedEvent) {
+      this.enemies[event.enemyId].curIndex = event.newIndex
+      if (!this.character.jumping && event.newIndex === this.character.curIndex) {
+        this.character.curIndex = 5
+      }
     }
   },
   mounted () {
