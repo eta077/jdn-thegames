@@ -1,10 +1,12 @@
 <template>
   <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :portals="this.portals"
     :character="this.character" @enemyMoved="this.handleEnemyMoved"/>
+  <AudioControl />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import AudioControl from './components/AudioControl.vue'
 import MapGrid from './components/MapGrid.vue'
 import { EnemyMovedEvent } from './model/Events'
 import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, PortalInfo } from './model/Model'
@@ -12,6 +14,7 @@ import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, Por
 export default defineComponent({
   name: 'App',
   components: {
+    AudioControl,
     MapGrid
   },
   data () {
