@@ -28,8 +28,8 @@ export default defineComponent({
   },
   computed: {
     enemyStyle (): CSSProperties {
-      const x = ((this.enemy.path[this.curIndex] % 5) * 200)
-      const y = Math.floor(this.enemy.path[this.curIndex] / 5) * 200
+      const x = ((this.enemy.path[this.curIndex] % 5) * 200) + 55
+      const y = Math.floor(this.enemy.path[this.curIndex] / 5) * 200 + 55
       return {
         position: 'fixed',
         left: x + 'px',

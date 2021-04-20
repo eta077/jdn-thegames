@@ -14,6 +14,13 @@ export interface MapTileInfo {
   index: number;
 }
 
+export class Orientation {
+  static readonly Up = 'Up';
+  static readonly Down = 'Down';
+  static readonly Left = 'Left';
+  static readonly Right = 'Right';
+}
+
 export interface PortalInfo {
   index: number;
   target: number;
@@ -41,7 +48,10 @@ export interface EnemyInfo {
 }
 
 export interface CharacterData {
+  startIndex: number;
   curIndex: number;
+  orientation: string;
+  step: boolean;
   curHealth: number;
   jumping: boolean;
 }

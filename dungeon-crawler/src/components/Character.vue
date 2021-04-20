@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      :src="require(`../../../../assets/character.png`)"
+      :src="require(`../../../../assets/${characterImage}.png`)"
       :style="characterStyle"
     />
   </div>
@@ -20,6 +20,15 @@ export default defineComponent({
     }
   },
   computed: {
+    characterImage (): string {
+      let step
+      if (this.character.step) {
+        step = '-step'
+      } else {
+        step = ''
+      }
+      return 'character-' + this.character.orientation + step
+    },
     characterStyle (): CSSProperties {
       const x = ((this.character.curIndex % 5) * 200) + 50
       let y = Math.floor(this.character.curIndex / 5) * 200 + 50

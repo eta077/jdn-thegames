@@ -9,7 +9,7 @@ import { defineComponent } from 'vue'
 import AudioControl from './components/AudioControl.vue'
 import MapGrid from './components/MapGrid.vue'
 import { EnemyMovedEvent } from './model/Events'
-import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, PortalInfo } from './model/Model'
+import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, Orientation, PortalInfo } from './model/Model'
 
 export default defineComponent({
   name: 'App',
@@ -22,7 +22,7 @@ export default defineComponent({
       mapTiles: [] as MapTileData[],
       enemies: [] as EnemyData[],
       portals: [] as PortalInfo[],
-      character: { curIndex: 0, curHealth: 1 } as CharacterData
+      character: { startIndex: 0, curIndex: 0, orientation: Orientation.Right, step: false, curHealth: 1 } as CharacterData
     }
   },
   methods: {
@@ -49,51 +49,67 @@ export default defineComponent({
           }
           this.enemies = resEnemies
           this.portals = data.portals
+          this.character.startIndex = data.charStartIndex
           this.character.curIndex = data.charStartIndex
+          this.character.orientation = Orientation.Right
         })
     },
     handleKeypress (e: KeyboardEvent) {
       switch (e.code) {
         case 'KeyW': {
+          if (!this.checkCharacterCurIndex(Orientation.Down)) {
+            return
+          }
           const newIndex = this.character.curIndex - 5
           const newY = newIndex / 5
           if (newY < 0) {
             return
           }
-          if (this.moveCharacter(newIndex)) {
+          if (this.checkCharacterNewIndex(newIndex)) {
             this.character.curIndex = newIndex
           }
           break
         }
         case 'KeyS': {
-          const newIndex = this.character.curIndex + 5
-          const newY = newIndex / 5
-          if (newY === 5) {
+          if (!this.checkCharacterCurIndex(Orientation.Up)) {
             return
           }
-          if (this.moveCharacter(newIndex)) {
+          const newIndex = this.character.curIndex + 5
+          const newY = newIndex / 5
+          if (newY >= 5) {
+            return
+          }
+          if (this.checkCharacterNewIndex(newIndex)) {
             this.character.curIndex = newIndex
           }
           break
         }
         case 'KeyA': {
+          if (!this.checkCharacterCurIndex(Orientation.Right)) {
+            return
+          }
           const newX = (this.character.curIndex % 5) - 1
           if (newX < 0) {
             return
           }
           const newIndex = this.character.curIndex - 1
-          if (this.moveCharacter(newIndex)) {
+          if (this.checkCharacterNewIndex(newIndex)) {
+            this.character.orientation = Orientation.Left
             this.character.curIndex = newIndex
           }
           break
         }
         case 'KeyD': {
+          if (!this.checkCharacterCurIndex(Orientation.Left)) {
+            return
+          }
           const newX = (this.character.curIndex % 5) + 1
           if (newX === 5) {
             return
           }
           const newIndex = this.character.curIndex + 1
-          if (this.moveCharacter(newIndex)) {
+          if (this.checkCharacterNewIndex(newIndex)) {
+            this.character.orientation = Orientation.Right
             this.character.curIndex = newIndex
           }
           break
@@ -107,22 +123,26 @@ export default defineComponent({
         }
       }
     },
-    moveCharacter (newIndex: number): boolean {
+    checkCharacterCurIndex (orientation: string): boolean {
+      for (const portal of this.portals) {
+        if (portal.index === this.character.curIndex && portal.orientation === orientation && portal.target != null) {
+          this.requestLevel(portal.target)
+          return false
+        }
+      }
+      return true
+    },
+    checkCharacterNewIndex (newIndex: number): boolean {
       if (this.mapTiles[newIndex].type.impenetrable) {
         return false
       }
       for (const enemy of this.enemies) {
         if (enemy.curIndex === newIndex) {
-          this.character.curIndex = 5
+          this.character.curIndex = this.character.startIndex
           return false
         }
       }
-      for (const portal of this.portals) {
-        if (portal.index === newIndex && portal.target != null) {
-          this.requestLevel(portal.target)
-          return false
-        }
-      }
+      this.character.step = !this.character.step
       return true
     },
     endCharacterJump () {
