@@ -4,6 +4,8 @@ use serde_derive::{Deserialize, Serialize};
 pub enum MapTileTypeName {
     Dirt,
     Bushes,
+    Wall,
+    Ladder,
 }
 
 #[derive(Serialize, Clone, Copy)]
@@ -38,6 +40,7 @@ pub struct Portal {
 pub enum EnemyTypeName {
     Crawler,
     Walker,
+    Runner,
 }
 
 #[derive(Serialize, Clone, Copy)]

@@ -283,8 +283,163 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                 },
                 Portal {
                     index: 24,
-                    target: None,
+                    target: Some(3),
                     orientation: PortalOrientation::Left,
+                },
+            ],
+        }),
+        3 => Ok(LevelResponse {
+            char_start_index: 0,
+            tile_types: vec![
+                MapTileType {
+                    name: MapTileTypeName::Dirt,
+                    impenetrable: false,
+                },
+                MapTileType {
+                    name: MapTileTypeName::Ladder,
+                    impenetrable: false,
+                },
+                MapTileType {
+                    name: MapTileTypeName::Wall,
+                    impenetrable: true,
+                },
+            ],
+            tiles: vec![
+                MapTile {
+                    type_index: 1,
+                    index: 0,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 1,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 2,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 3,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 4,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 5,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 6,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 7,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 8,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 9,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 10,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 11,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 12,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 13,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 14,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 15,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 16,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 17,
+                },
+                MapTile {
+                    type_index: 0,
+                    index: 18,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 19,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 20,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 21,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 22,
+                },
+                MapTile {
+                    type_index: 2,
+                    index: 23,
+                },
+                MapTile {
+                    type_index: 1,
+                    index: 24,
+                },
+            ],
+            enemy_types: vec![
+                EnemyType {
+                    name: EnemyTypeName::Crawler,
+                    health: 1,
+                    speed: 1,
+                },
+                EnemyType {
+                    name: EnemyTypeName::Runner,
+                    health: 1,
+                    speed: 1,
+                },
+            ],
+            enemies: vec![
+                Enemy {
+                    id: 0,
+                    type_index: 0,
+                    path: vec![6, 11, 16, 17, 18, 13, 8, 7],
+                },
+                Enemy {
+                    id: 1,
+                    type_index: 1,
+                    path: vec![18, 13, 8, 7, 6, 11, 16, 17],
+                },
+            ],
+            portals: vec![
+                Portal {
+                    index: 0,
+                    target: Some(2),
+                    orientation: PortalOrientation::Down,
+                },
+                Portal {
+                    index: 24,
+                    target: None,
+                    orientation: PortalOrientation::Up,
                 },
             ],
         }),
