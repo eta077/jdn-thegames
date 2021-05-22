@@ -33,7 +33,8 @@ export default defineComponent({
       return {
         position: 'fixed',
         left: x + 'px',
-        top: y + 'px'
+        top: y + 'px',
+        zIndex: 10
       }
     }
   },

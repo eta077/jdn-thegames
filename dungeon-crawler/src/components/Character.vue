@@ -27,7 +27,13 @@ export default defineComponent({
       } else {
         step = ''
       }
-      return 'character-' + this.character.orientation + step
+      let powerup
+      if (this.character.powerup === '') {
+        powerup = ''
+      } else {
+        powerup = this.character.powerup + '-'
+      }
+      return 'character-' + powerup + this.character.orientation + step
     },
     characterStyle (): CSSProperties {
       const x = ((this.character.curIndex % 5) * 200) + 50

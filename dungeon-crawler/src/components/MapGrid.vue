@@ -6,6 +6,9 @@
     <div v-for="enemy in enemies" :key="enemy.id">
       <Enemy :enemy="enemy" v-bind="$attrs"/>
     </div>
+    <div v-for="powerup in powerups" :key="powerup.index">
+      <Powerup :powerup="powerup"/>
+    </div>
     <div v-for="portal in portals" :key="portal.index">
       <Portal :portal="portal"/>
     </div>
@@ -18,12 +21,13 @@ import { defineComponent, PropType } from 'vue'
 import MapTile from './MapTile.vue'
 import Enemy from './Enemy.vue'
 import Portal from './Portal.vue'
+import Powerup from './Powerup.vue'
 import Character from './Character.vue'
-import { EnemyInfo, MapTileData, PortalInfo } from '../model/Model'
+import { CharacterData, EnemyInfo, MapTileData, PortalInfo, PowerupData } from '../model/Model'
 
 export default defineComponent({
   name: 'MapGrid',
-  components: { MapTile, Enemy, Portal, Character },
+  components: { MapTile, Enemy, Portal, Powerup, Character },
   props: {
     mapTiles: {
       type: Array as PropType<Array<MapTileData>>,
@@ -35,6 +39,10 @@ export default defineComponent({
     },
     portals: {
       type: Array as PropType<Array<PortalInfo>>,
+      required: true
+    },
+    powerups: {
+      type: Array as PropType<Array<PowerupData>>,
       required: true
     },
     character: {

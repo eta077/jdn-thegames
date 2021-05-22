@@ -19,21 +19,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, HandlerError> {
+fn level_handler<'a>(e: LevelRequest, context: Context) -> Result<LevelResponse<'a>, HandlerError> {
     let level = e.level;
     match level {
         1 => Ok(LevelResponse {
-            char_start_index: 5,
-            tile_types: vec![
-                MapTileType {
-                    name: MapTileTypeName::Bushes,
-                    impenetrable: true,
-                },
-                MapTileType {
-                    name: MapTileTypeName::Dirt,
-                    impenetrable: false,
-                },
-            ],
+            tile_types: vec![BUSHES_MAP_TILE, DIRT_MAP_TILE],
             tiles: vec![
                 MapTile {
                     type_index: 0,
@@ -136,11 +126,7 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     index: 24,
                 },
             ],
-            enemy_types: vec![EnemyType {
-                name: EnemyTypeName::Walker,
-                health: 1,
-                speed: 1,
-            }],
+            enemy_types: vec![WALKER_ENEMY_TYPE],
             enemies: vec![Enemy {
                 id: 0,
                 type_index: 0,
@@ -158,19 +144,12 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     orientation: PortalOrientation::Left,
                 },
             ],
+            powerup_types: vec![],
+            powerups: vec![],
+            char_start_index: 5,
         }),
         2 => Ok(LevelResponse {
-            char_start_index: 10,
-            tile_types: vec![
-                MapTileType {
-                    name: MapTileTypeName::Bushes,
-                    impenetrable: true,
-                },
-                MapTileType {
-                    name: MapTileTypeName::Dirt,
-                    impenetrable: false,
-                },
-            ],
+            tile_types: vec![BUSHES_MAP_TILE, DIRT_MAP_TILE],
             tiles: vec![
                 MapTile {
                     type_index: 0,
@@ -287,23 +266,15 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     orientation: PortalOrientation::Left,
                 },
             ],
+            powerup_types: vec![SPEED_POWERUP_TYPE],
+            powerups: vec![Powerup {
+                type_index: 0,
+                index: 17,
+            }],
+            char_start_index: 10,
         }),
         3 => Ok(LevelResponse {
-            char_start_index: 0,
-            tile_types: vec![
-                MapTileType {
-                    name: MapTileTypeName::Dirt,
-                    impenetrable: false,
-                },
-                MapTileType {
-                    name: MapTileTypeName::Ladder,
-                    impenetrable: false,
-                },
-                MapTileType {
-                    name: MapTileTypeName::Wall,
-                    impenetrable: true,
-                },
-            ],
+            tile_types: vec![DIRT_MAP_TILE, LADDER_MAP_TILE, WALL_MAP_TILE],
             tiles: vec![
                 MapTile {
                     type_index: 1,
@@ -406,18 +377,7 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     index: 24,
                 },
             ],
-            enemy_types: vec![
-                EnemyType {
-                    name: EnemyTypeName::Crawler,
-                    health: 1,
-                    speed: 1,
-                },
-                EnemyType {
-                    name: EnemyTypeName::Runner,
-                    health: 1,
-                    speed: 1,
-                },
-            ],
+            enemy_types: vec![CRAWLER_ENEMY_TYPE, RUNNER_ENEMY_TYPE],
             enemies: vec![
                 Enemy {
                     id: 0,
@@ -442,6 +402,9 @@ fn level_handler(e: LevelRequest, context: Context) -> Result<LevelResponse, Han
                     orientation: PortalOrientation::Up,
                 },
             ],
+            powerup_types: vec![],
+            powerups: vec![],
+            char_start_index: 0,
         }),
         _ => {
             let error = format!("Unknown level: {}", level);

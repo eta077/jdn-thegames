@@ -1,5 +1,5 @@
 <template>
-  <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :portals="this.portals"
+  <MapGrid :mapTiles="this.mapTiles" :enemies="this.enemies" :powerups="this.powerups" :portals="this.portals"
     :character="this.character" @enemyMoved="this.handleEnemyMoved"/>
   <AudioControl />
 </template>
@@ -9,7 +9,7 @@ import { defineComponent } from 'vue'
 import AudioControl from './components/AudioControl.vue'
 import MapGrid from './components/MapGrid.vue'
 import { EnemyMovedEvent } from './model/Events'
-import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, Orientation, PortalInfo } from './model/Model'
+import { CharacterData, EnemyData, LevelRequest, LevelResponse, MapTileData, Orientation, PortalInfo, PowerupData } from './model/Model'
 
 export default defineComponent({
   name: 'App',
@@ -21,8 +21,9 @@ export default defineComponent({
     return {
       mapTiles: [] as MapTileData[],
       enemies: [] as EnemyData[],
+      powerups: [] as PowerupData[],
       portals: [] as PortalInfo[],
-      character: { startIndex: 0, curIndex: 0, orientation: Orientation.Right, step: false, curHealth: 1 } as CharacterData
+      character: { startIndex: 0, curIndex: 0, orientation: Orientation.Right, step: false, curHealth: 1, powerup: '' } as CharacterData
     }
   },
   methods: {
@@ -47,7 +48,13 @@ export default defineComponent({
             const enemyType = data.enemyTypes[enemy.typeIndex]
             resEnemies.push({ id: enemy.id, type: enemyType, path: enemy.path, curIndex: enemy.path[0], curHealth: enemyType.health })
           }
+          const resPowerups: PowerupData[] = []
+          for (const powerup of data.powerups) {
+            const powerupType = data.powerupTypes[powerup.typeIndex]
+            resPowerups.push({ type: powerupType.name, healthBoost: powerupType.healthBoost, speedBoost: powerupType.speedBoost, index: powerup.index })
+          }
           this.enemies = resEnemies
+          this.powerups = resPowerups
           this.portals = data.portals
           this.character.startIndex = data.charStartIndex
           this.character.curIndex = data.charStartIndex
@@ -142,6 +149,15 @@ export default defineComponent({
           return false
         }
       }
+      let removedPowerup = this.powerups.length
+      for (let i = 0; i < this.powerups.length; i++) {
+        const powerup = this.powerups[i]
+        if (powerup.index === newIndex) {
+          this.character.powerup = powerup.type
+          removedPowerup = i
+        }
+      }
+      this.powerups.splice(removedPowerup, 1)
       this.character.step = !this.character.step
       return true
     },

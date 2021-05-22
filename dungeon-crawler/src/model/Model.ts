@@ -47,6 +47,24 @@ export interface EnemyInfo {
   path: number[];
 }
 
+export interface PowerupType {
+  name: string;
+  healthBoost: number;
+  speedBoost: number;
+}
+
+export interface PowerupInfo {
+  typeIndex: number;
+  index: number;
+}
+
+export interface PowerupData {
+  type: string;
+  healthBoost: number;
+  speedBoost: number;
+  index: number;
+}
+
 export interface CharacterData {
   startIndex: number;
   curIndex: number;
@@ -54,15 +72,18 @@ export interface CharacterData {
   step: boolean;
   curHealth: number;
   jumping: boolean;
+  powerup: string;
 }
 
 export interface LevelResponse {
-  charStartIndex: number;
   tileTypes: MapTileType[];
   tiles: MapTileInfo[];
   enemyTypes: EnemyType[];
   enemies: EnemyInfo[];
   portals: PortalInfo[];
+  powerupTypes: PowerupType[];
+  powerups: PowerupInfo[];
+  charStartIndex: number;
 }
 
 export class LevelRequest {
