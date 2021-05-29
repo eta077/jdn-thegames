@@ -165,9 +165,11 @@ export default defineComponent({
       this.character.jumping = false
       let removedEnemy = this.enemies.length
       for (let i = 0; i < this.enemies.length; i++) {
-        if (this.enemies[i].curIndex === this.character.curIndex) {
+        const enemy = this.enemies[i]
+        if (enemy.curIndex === this.character.curIndex) {
           removedEnemy = i
-          break
+        } else if (removedEnemy < i) {
+          enemy.id -= 1
         }
       }
       if (removedEnemy < this.enemies.length) {
