@@ -122,10 +122,7 @@ export default defineComponent({
           break
         }
         case 'KeyJ': {
-          if (!this.character.jumping) {
-            this.character.jumping = true
-            setTimeout(this.endCharacterJump, 250)
-          }
+          this.startCharacterJump()
           break
         }
       }
@@ -161,12 +158,21 @@ export default defineComponent({
       this.character.step = !this.character.step
       return true
     },
+    startCharacterJump () {
+      if (!this.character.jumping) {
+        this.character.jumping = true
+        setTimeout(this.endCharacterJump, 250)
+      }
+    },
     endCharacterJump () {
       this.character.jumping = false
       for (let i = 0; i < this.enemies.length; i++) {
         const enemy = this.enemies[i]
         if (enemy.curIndex === this.character.curIndex) {
           enemy.curHealth -= 1
+          if (enemy.curHealth >= 0) {
+            setTimeout(this.startCharacterJump, 250)
+          }
           break
         }
       }
