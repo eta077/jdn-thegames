@@ -163,20 +163,23 @@ export default defineComponent({
     },
     endCharacterJump () {
       this.character.jumping = false
-      let removedEnemy = this.enemies.length
       for (let i = 0; i < this.enemies.length; i++) {
         const enemy = this.enemies[i]
         if (enemy.curIndex === this.character.curIndex) {
-          removedEnemy = i
-        } else if (removedEnemy < i) {
-          enemy.id -= 1
+          enemy.curHealth -= 1
+          break
         }
-      }
-      if (removedEnemy < this.enemies.length) {
-        this.enemies.splice(removedEnemy, 1)
       }
     },
     handleEnemyMoved (event: EnemyMovedEvent) {
+      const enemyIndex = event.enemyId
+      const enemy = this.enemies[enemyIndex]
+      if (enemy.curHealth <= 0) {
+        this.enemies.splice(enemyIndex, 1)
+        for (let i = enemyIndex; i < this.enemies.length; i++) {
+          this.enemies[i].id -= 1
+        }
+      }
       this.enemies[event.enemyId].curIndex = event.newIndex
       if (!this.character.jumping && event.newIndex === this.character.curIndex) {
         this.character.curIndex = 5

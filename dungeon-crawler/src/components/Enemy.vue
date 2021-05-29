@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      :src="require(`../../../../assets/${enemy.type.name}.png`)"
+      :src="require(`../../../../assets/${enemyImage}.png`)"
       :style="enemyStyle"
     />
   </div>
@@ -27,6 +27,15 @@ export default defineComponent({
     }
   },
   computed: {
+    enemyImage (): string {
+      let state
+      if (this.enemy.curHealth <= 0) {
+        state = '-defeated'
+      } else {
+        state = ''
+      }
+      return this.enemy.type.name + state
+    },
     enemyStyle (): CSSProperties {
       const x = ((this.enemy.path[this.curIndex] % 5) * 200) + 55
       const y = Math.floor(this.enemy.path[this.curIndex] / 5) * 200 + 55
